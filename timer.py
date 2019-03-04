@@ -34,7 +34,7 @@ def toast_when_finished(toast_duration, start_msg, end_msg):
 
 @toast_when_finished(
     toast_duration=1,
-    start_msg='Time is running. Go do your job!',
+    start_msg='Timer of {} minute(s) is running. Go do your job!',
     end_msg='Yo! your time is up lol')
 def start_timer(minutes):
     print('That\'s it, you\'ll be notified after {} minute(s)'.format(minutes))
@@ -46,10 +46,13 @@ def main():
         description='A utility timer alarm which notifies your Windows 10 machine when timer is finished'
     )
 
-    parser.add_argument('duration', action='store', type=int,
+    parser.add_argument('-o', '--hours', action='store', type=int, default=0,
+                        help='Duration of timer in hours')
+    parser.add_argument('-m', '--minutes', action='store', type=int, default=5,
                         help='Duration of timer in minutes')
     args = parser.parse_args()
-    start_timer(args.duration)
+    duration = args.hours*60 + args.minutes
+    start_timer(duration)
     print('Yo! Your time is up!')
 
 
