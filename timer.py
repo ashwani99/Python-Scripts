@@ -14,22 +14,26 @@ def toast_when_finished(toast_duration, start_msg, end_msg):
             toaster.show_toast(
                 title=APP_NAME,
                 msg=start_msg,
-                duration=toast_duration
+                duration=toast_duration,
+                threaded=True
             )
             ret_val = f(*args, **kwargs)
+            time.sleep(2)
             # notify after timer ends
             toaster.show_toast(
                 title=APP_NAME,
                 msg=end_msg,
-                duration=toast_duration
+                duration=toast_duration,
+                threaded=True
             )
+            print('all done')
             return ret_val
         return wrapper
     return decorator
 
 
 @toast_when_finished(
-    toast_duration=10,
+    toast_duration=1,
     start_msg='Time is running. Go do your job!',
     end_msg='Yo! your time is up lol')
 def start_timer(minutes):
