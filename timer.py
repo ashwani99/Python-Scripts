@@ -13,7 +13,7 @@ def toast_when_finished(toast_duration, start_msg, end_msg):
             # notify when timer starts
             toaster.show_toast(
                 title=APP_NAME,
-                msg=start_msg,
+                msg=start_msg.format(args[0]),
                 duration=toast_duration,
                 threaded=True
             )
