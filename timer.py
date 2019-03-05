@@ -10,15 +10,17 @@ def toast_when_finished(toast_duration, start_msg, end_msg):
     def decorator(f):
         toaster = ToastNotifier()
         def wrapper(*args, **kwargs):
+            print(args)
+            print(kwargs)
             # notify when timer starts
+            params = args[0]
             toaster.show_toast(
                 title=APP_NAME,
-                msg=start_msg.format(args[0]),
+                msg=start_msg.format(params['hours'], params['minutes'], params['seconds']),
                 duration=toast_duration,
                 threaded=True
             )
             ret_val = f(*args, **kwargs)
-            time.sleep(2)
             # notify after timer ends
             toaster.show_toast(
                 title=APP_NAME,
@@ -33,13 +35,17 @@ def toast_when_finished(toast_duration, start_msg, end_msg):
 
 
 @toast_when_finished(
-    toast_duration=1,
-    start_msg='Timer of {} minute(s) is running. Go do your job!',
+    toast_duration=5,
+    start_msg='Timer of {:02d} hours {:02d} minutes {:02d} seconds is running. Go do your job!',
     end_msg='Yo! your time is up lol')
-def start_timer(minutes):
-    print('That\'s it, you\'ll be notified after {} minute(s)'.format(minutes))
-    time.sleep(minutes*60)
+def start_timer(duration):
+    total_seconds = duration['hours']*3600 + duration['minutes']*60 + duration['seconds']
+    time.sleep(total_seconds)
 
+
+def show_countdown():
+    pass
+    
 
 def main():
     parser = argparse.ArgumentParser(
@@ -50,8 +56,10 @@ def main():
                         help='Duration of timer in hours')
     parser.add_argument('-m', '--minutes', action='store', type=int, default=5,
                         help='Duration of timer in minutes')
+    parser.add_argument('-s', '--seconds', action='store', type=int, default=0,
+                        help='Duration of timer in seconds')
     args = parser.parse_args()
-    duration = args.hours*60 + args.minutes
+    duration = vars(args)
     start_timer(duration)
     print('Yo! Your time is up!')
 
